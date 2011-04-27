@@ -1,5 +1,7 @@
 all:
-	gcc -o nc nc.c -lncurses
+	gcc -c list.c
+	gcc -c nc.c
+	gcc -lncurses -o nc nc.o list.o
 
 clean:
-	rm nc
+	rm nc *.o

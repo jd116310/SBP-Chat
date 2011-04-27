@@ -10,6 +10,7 @@ typedef struct item
 
 void additem(item **head, const char *p);
 void removeitem(item **head, int id);
+int len(item *head);
 void displayList(item *head, WINDOW* w);
 
 #endif

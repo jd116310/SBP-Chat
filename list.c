@@ -31,10 +31,10 @@ void removeitem(item **head, int id)
 {
 	item *i, *p;
 	
-	if(*head && id == (*head)->id)
+	if((*head != NULL) && (id == (*head)->id))
 	{
 		i = *head;
-		//*head == head->next;
+		(*head) = (*head)->next;
 		free(i);
 		return;
 	}
@@ -51,6 +51,15 @@ void removeitem(item **head, int id)
 	
 	//um...it wasnt found
 	return; //error
+}
+
+int len(item *head)
+{
+	int i;
+	item *p;
+	for(p = head, i = 0; p != NULL; p = p->next, ++i);
+	
+	return i;
 }
 
 void displayList(item *head, WINDOW* w)

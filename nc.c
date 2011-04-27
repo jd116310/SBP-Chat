@@ -2,6 +2,10 @@
 #include <string.h>
 #include <ctype.h>
 #include <ncurses.h>
+#include "list.h"
+
+item *qlist = NULL; // queue list
+item *blist = NULL; // board list
 
 typedef struct win
 {
@@ -48,7 +52,7 @@ int main(void)
 	// Set up ncurses
 	cbreak();
 	nonl();
-    //noecho();				// Turn off key echoing
+    noecho();				// Turn off key echoing
     keypad(stdscr, TRUE);	// Enable the keypad for non-char keys  */
     
     // this is important i think
@@ -124,10 +128,18 @@ int main(void)
 				// get the message from the input
 				mvwinnstr(input.window, 1, 0, buff, 256);
 				
-				// put it on the queue
-				mvwaddch(queue.window, 1, 0, '-');
-    			mvwprintw(queue.window, 1, 1, buff);
-    			wrefresh(queue.window);
+				// put it on the queue's list
+				additem(&qlist, buff);
+				
+				if(len(qlist) > 3)
+				{
+					additem(&blist, qlist->buff);
+					removeitem(&qlist, qlist->id);
+				}
+				
+				// display the list
+				displayList(blist, board.window);
+				displayList(qlist, queue.window);
     			
     			// clear input
     			wmove(input.window, 1 , 0);
@@ -141,7 +153,7 @@ int main(void)
 				break;
         }
         
-        // Do an overall refresh for now, make more efficient later
+        // refresh
 		wrefresh(input.window);
     }
     
