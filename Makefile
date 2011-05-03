@@ -1,7 +1,14 @@
-all:
+all: client server
+
+client: 
 	gcc -c list.c
-	gcc -c nc.c
-	gcc -lncurses -o nc nc.o list.o
+	gcc -c client.c
+	gcc -lncurses -o client client.o list.o
+
+server:
+
+run:
+	./client
 
 clean:
-	rm nc *.o
+	rm client *.o
