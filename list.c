@@ -66,11 +66,17 @@ void displayList(item *head, WINDOW* w)
 {
 	item *i;
 	int line = 1;
-	
-	
+		
 	for(i = head; i != NULL; i=i->next, ++line)
 	{
+		// clear line
+		wmove(w, line, 0);
+		wclrtoeol(w);
+		
+		// add tick mark
 		mvwaddch(w, line, 0, '-');
+		
+		// put string
 		mvwprintw(w, line, 1, i->buff);
 	}
 	wrefresh(w);

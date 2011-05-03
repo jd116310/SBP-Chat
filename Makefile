@@ -1,9 +1,10 @@
 all: client server
 
-client: 
-	gcc -c list.c
+client: client.c gui.c list.c
 	gcc -c client.c
-	gcc -lncurses -o client client.o list.o
+	gcc -c gui.c
+	gcc -c list.c
+	gcc -lncurses -o client client.o list.o gui.o
 
 server:
 
