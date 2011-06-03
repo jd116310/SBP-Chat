@@ -1,10 +1,17 @@
+CC=gcc
+CCFLAGS=-c -g -O2 -Wall -Werror 
+
+SOURCES=${wildcard *.c}
+HEADERS=${wildcard *.h}
+OBJECTS=${SOURCES:.c=.o}
+
+LDFLAGS=-lsbp_ion -lbp -lbpP -ldtn2fw -lici -lncurses #-lecos -lipcx 
+
 all: client server
 
-client: client.c gui.c list.c
-	gcc -c client.c
-	gcc -c gui.c
-	gcc -c list.c
-	gcc -lncurses -o client client.o list.o gui.o
+${OBJECTS}: ${HEADERS} Makefile
+
+client: $(OBJECTS)
 
 server:
 

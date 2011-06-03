@@ -2,16 +2,16 @@
 #include <string.h>
 #include <ctype.h>
 
-int main(void) 
+int main(int argc, char *argv[]) 
 {
 	// parse params
 	//...
 	
-	/*
-	SBP_Init();
-	SBP_Connection *conn = SBP_CreateConnection(src_eid);
-	SBP_SetDestination(conn, dest_eid);
-	*/
+	
+	//SBP_Init();
+	//SBP_Connection *conn = SBP_CreateConnection(src_eid);
+	//SBP_SetDestination(conn, dest_eid);
+	
 	
 	// Initialize the gui
     init();
@@ -19,10 +19,10 @@ int main(void)
     // run the gui's main loop
     run();
     
-    /*
-    SBP_DestroyConnection(conn);
-	SBP_Shutdown();
-	*/
+    
+    //SBP_DestroyConnection(conn);
+	//SBP_Shutdown();
+	
 
     return EXIT_SUCCESS;
 }
