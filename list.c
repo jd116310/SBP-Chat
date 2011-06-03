@@ -53,6 +53,7 @@ void removeitem(item **head, int id)
 	return; //error
 }
 
+// length of a list
 int len(item *head)
 {
 	int i;

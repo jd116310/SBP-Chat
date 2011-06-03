@@ -37,6 +37,7 @@ void createHeader(win w, const char *s)
 	wmove(w.window, 0 ,0);
     waddch(w.window, ACS_HLINE);
     wprintw(w.window, s);
+    
 	for(i = strlen(s) + 1; i < w.w; ++i)
 		waddch(w.window, ACS_HLINE);
 	
@@ -57,6 +58,9 @@ void init()
 	nonl();
     noecho();				// Turn off key echoing
     keypad(stdscr, TRUE);	// Enable the keypad for non-char keys  */
+    
+    // Dont wait any time when the escape key is pressed
+    ESCDELAY = 0;
     
     // this is important i think
 	refresh();
@@ -103,7 +107,7 @@ void init()
 void run()
 {
 	int ch;
-    int x, y, i;
+    int x, y, i, running = 1;
     int curline = 1;
 	char buff[256];
 	char *message;
@@ -111,12 +115,16 @@ void run()
 	// ======================= main event loop ====================
 	
     //  Loop until user presses 'q'
-    while ( (ch = getch()) != 'q' ) 
+    while (running && (ch = getch())) 
     {
     	x = getcurx(input.window);
     	switch(ch)
     	{
+    		case 27: // escape. No KEY_ESC is defined :(
+    			running = 0;
+    			break;
     		case KEY_PPAGE: // page up
+    			// scroll board up
     		case KEY_NPAGE: // page down
     			// scroll board down
     			break;

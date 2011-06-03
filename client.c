@@ -7,11 +7,22 @@ int main(void)
 	// parse params
 	//...
 	
+	/*
+	SBP_Init();
+	SBP_Connection *conn = SBP_CreateConnection(src_eid);
+	SBP_SetDestination(conn, dest_eid);
+	*/
+	
 	// Initialize the gui
     init();
     
     // run the gui's main loop
     run();
+    
+    /*
+    SBP_DestroyConnection(conn);
+	SBP_Shutdown();
+	*/
 
     return EXIT_SUCCESS;
 }
