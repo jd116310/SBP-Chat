@@ -180,7 +180,7 @@ void run()
     			
     			break;
     		default:
-    			if(x == COLS) break;
+    			if(x == COLS || !isprint(ch)) break;
 				winsch(input.window, ch);
 				wmove(input.window, curline, x+1);
 				break;

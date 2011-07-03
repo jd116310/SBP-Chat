@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
 	conn->blocking = SBP_POLL;
 	SBP_SetDestination(conn, dst_eid);
 	
+	bp_init(conn);
+	
 	// ======================= lets make pretty stuff ====================
     init();
     run();
