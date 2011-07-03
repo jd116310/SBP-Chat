@@ -1,27 +1,30 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <sbp_api.h>
 
 int main(int argc, char *argv[]) 
 {
 	// parse params
 	//...
+	char src_eid[] = "ipn:1.1";
+	char dst_eid[] = "ipn:1.2";
 	
+	SBP_Init();
+	SBP_Connection *conn = SBP_CreateConnection(src_eid);
+	SBP_SetDestination(conn, dst_eid);
 	
-	//SBP_Init();
-	//SBP_Connection *conn = SBP_CreateConnection(src_eid);
-	//SBP_SetDestination(conn, dest_eid);
-	
-	
+	//conn->blocking = SBP_BLOCKING;
+	//int err = conn->listen(conn);
+
 	// Initialize the gui
     init();
     
     // run the gui's main loop
     run();
     
-    
-    //SBP_DestroyConnection(conn);
-	//SBP_Shutdown();
+    SBP_DestroyConnection(conn);
+	SBP_Shutdown();
 	
 
     return EXIT_SUCCESS;
