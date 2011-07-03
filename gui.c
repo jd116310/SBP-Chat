@@ -28,6 +28,26 @@ char *trim(char *c)
     return c;
 }
 
+void displayList(item *head, WINDOW* w)
+{
+	item *i;
+	int line = 1;
+		
+	for(i = head; i != NULL; i=i->next, ++line)
+	{
+		// clear line
+		wmove(w, line, 0);
+		wclrtoeol(w);
+		
+		// add tick mark
+		mvwaddch(w, line, 0, '-');
+		
+		// put string
+		mvwprintw(w, line, 1, i->buff);
+	}
+	wrefresh(w);
+}
+
 // Puts a nice header at the top of a window in the form:
 // -mystring--------------------------------------------
 void createHeader(win w, const char *s) 
@@ -50,7 +70,7 @@ void init()
     if ((initscr()) == NULL ) 
     {
 		fprintf(stderr, "Error initializing ncurses.\n");
-		exit(EXIT_FAILURE);
+		exit(1);
     }
     
 	// Set up ncurses
@@ -66,18 +86,15 @@ void init()
 	refresh();
 	
 	// ======================= set up the input window ====================
-	
 	input.h = 2;
 	input.w = COLS;
 	input.y = LINES - input.h;
 	input.x = 0;
     input.window = newwin(input.h, input.w, input.y, input.x);
     
-    // create a horizontal line
     createHeader(input, "Message");
     
     // ======================= set up the queue window ====================
-    
     queue.h = 6;
 	queue.w = COLS;
 	queue.y = LINES - queue.h - input.h;
@@ -87,7 +104,6 @@ void init()
     createHeader(queue, "Queue");
 	
 	// ======================= set up the board window ====================
-	
 	board.h = LINES - queue.h - input.h;
 	board.w = COLS;
 	board.y = 0;
@@ -150,7 +166,6 @@ void run()
 				message = trim(buff);
 				
 				if(strlen(message) == 0) break;
-				//strcat(message, "!");
 				
 				// put it on the queue's list
 				additem(&qlist, message);
