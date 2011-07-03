@@ -4,9 +4,6 @@
 #include <string.h>
 #include "list.h"
 
-item *qlist = NULL; // queue list
-item *blist = NULL; // board list
-
 typedef struct win
 {
 	int h;	// heigth of the window
@@ -46,6 +43,13 @@ void displayList(item *head, WINDOW* w)
 		mvwprintw(w, line, 1, i->buff);
 	}
 	wrefresh(w);
+}
+
+void gui_update(item *q, item *b)
+{
+	// display the lists
+	displayList(b, board.window);
+	displayList(q, queue.window);
 }
 
 // Puts a nice header at the top of a window in the form:
@@ -167,20 +171,9 @@ void run()
 				
 				if(strlen(message) == 0) break;
 				
-				// put it on the queue's list
-				additem(&qlist, message);
-				
-				// temporary for testing
-				if(len(qlist) > 3)
-				{
-					additem(&blist, qlist->buff);
-					removeitem(&qlist, qlist->id);
-				}
-				
-				// display the lists
-				displayList(blist, board.window);
-				displayList(qlist, queue.window);
-    			
+				// send it
+				sendMessage(message);
+
     			// clear input
     			wmove(input.window, 1 , 0);
     			wclrtoeol(input.window);

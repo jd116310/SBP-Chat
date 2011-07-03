@@ -2,8 +2,27 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include "list.h"
+#include "gui.h"
 
 static int counter = 0;
+item *qlist = NULL; // queue list
+item *blist = NULL; // board list
+
+
+// Adds a message to the queue, sends it over BP, and updates the gui
+void sendMessage(const char *p)
+{
+	additem(&qlist, p);
+	//bp_send
+	gui_update(qlist, blist);
+}
+
+void recvMessage(const char *p)
+{
+	additem(&blist, p);
+	//remove from qlist?
+	gui_update(qlist, blist);
+}
 
 void additem(item **head, const char *p)
 {
