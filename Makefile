@@ -1,22 +1,27 @@
 CC=gcc
-CCFLAGS=-c -g -O2 -Wall -Werror 
+CCFLAGS=-c -g -Wall
+ION_LDFLAGS=-lsbp_ion -lbp -lbpP -ldtn2fw -lici -lncurses
+DTN_LDFLAGS=-lsbp_dtn -ldtnapi
+TARGET=client
+OBJS=client.o bp.o list.o gui.o
 
-SOURCES=${wildcard *.c}
-HEADERS=${wildcard *.h}
-OBJECTS=${SOURCES:.c=.o}
+all: ion
 
-LDFLAGS=-lsbp_ion -lbp -lbpP -ldtn2fw -lici -lncurses #-lecos -lipcx 
+ion: $(OBJS)
+	$(CC) $(ION_LDFLAGS) $(OBJS) -o $(TARGET)
 
-all: client server
+dtn: $(OBJS)
+	$(CC) $(DTN_LDFLAGS) $(OBJS) -o $(TARGET)
 
-${OBJECTS}: ${HEADERS} Makefile
-
-client: $(OBJECTS)
-
-server:
-
-run:
-	./client
+client.o: client.c
+	$(CC) $(CCFLAGS) client.c
+bp.o: bp.c
+	$(CC) $(CCFLAGS) bp.c
+list.o: list.c
+	$(CC) $(CCFLAGS) list.c
+gui.o: gui.c
+	$(CC) $(CCFLAGS) gui.c
 
 clean:
-	rm client *.o
+	rm -f *.o $(TARGET)
+

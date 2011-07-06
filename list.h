@@ -9,8 +9,8 @@ typedef struct item
 }item;
 
 // Simple enough...
-void sendMessage(const char *p);
-void recvMessage(const char *p);
+void sendMessage(char *p);
+void recvMessage(char *p);
 
 //void additem(item **head, const char *p);
 //void removeitem(item **head, int id);

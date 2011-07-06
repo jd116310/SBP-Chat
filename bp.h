@@ -3,8 +3,9 @@
 
 #include <sbp_api.h>
 
-void bp_init(SBP_Connection *c);
-void bp_send();
+void bpInit(char *src, char *dst);
+void bpQuit();
+void bpSendMessage(char *m);
 //void bp_recv();
 
 #endif

@@ -3,6 +3,7 @@
 #include <ncurses.h>
 #include "list.h"
 #include "gui.h"
+#include "bp.h"
 
 static int counter = 0;
 item *qlist = NULL; // queue list
@@ -46,7 +47,7 @@ void removeitem(item **head, int id)
 	{
 		if(id == i->id)
 		{
-			p->next == i->next->next;
+			p->next = i->next;
 			free(i);
 			return;
 		}
@@ -67,17 +68,17 @@ int len(item *head)
 }
 
 // Adds a message to the queue, sends it over BP, and updates the gui
-void sendMessage(const char *p)
+void sendMessage(char *p)
 {
 	additem(&qlist, p);
-	//bp_send
+	bpSendMessage(p);
 	gui_update(qlist, blist);
 }
 
-void recvMessage(const char *p)
+void recvMessage(char *p)
 {
 	additem(&blist, p);
-	//remove from qlist?
+	//removeitem(&qlist, 0);
 	gui_update(qlist, blist);
 }
 

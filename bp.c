@@ -3,14 +3,17 @@
 #include <string.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <stdlib.h>
+#include <time.h>
 #include <sbp_api.h>
 #include "list.h"
 
 #define SBP_BUFSZ (8192)
 
 SBP_Connection *conn;
+int myID;
 
-void bp_recv()
+void bpRecv()
 {
 	int res = conn->listen(conn);
 	if(res >= 0)
@@ -27,17 +30,29 @@ void bp_recv()
 
 void check(int sig)
 {
-	bp_recv();
+	bpRecv();
 }
 
-void bp_init(SBP_Connection *c)
+void bpInit(char *src, char *dst)
 {
+	SBP_Init();
+	conn = SBP_CreateConnection(src);
+	if(conn == NULL)
+	{
+		SBP_FATAL("Unable to open connection. . .");
+	}
+	
+	conn->blocking = SBP_POLL;
+	SBP_SetDestination(conn, dst);
+
+	// Set up timer for receiving 
+
 	struct sigaction sigalrm_action;
 	struct itimerval timer;
 	
 	timer.it_interval.tv_sec = 0;	//Deal only in usec
 	timer.it_interval.tv_usec = 100000;
-	timer.it_value.tv_sec = 0;	//Deal only in usec
+	timer.it_value.tv_sec = 0;		//Deal only in usec
 	timer.it_value.tv_usec = 100000;	
 
 	sigalrm_action.sa_handler = check;	
@@ -51,14 +66,20 @@ void bp_init(SBP_Connection *c)
 		printf("Error starting timer");
 		exit(1);
 	}
+	srand(time(NULL));
 	
-	conn = c;
+	myID = rand();	
 }
 
-void bp_send()
+void bpQuit()
 {
-		//SBP_SetDestination(conn, SBP_GetDeliverySource(conn));
-		//conn->send(conn, bundle_buffer, bundle_size);
+    SBP_DestroyConnection(conn);
+	SBP_Shutdown();
+}
+
+void bpSendMessage(char *m)
+{
+	conn->send(conn, m, strlen(m));
 }
 
 

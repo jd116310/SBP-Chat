@@ -127,7 +127,7 @@ void init()
 void run()
 {
 	int ch;
-    int x, y, i, running = 1;
+    int x, running = 1;
     int curline = 1;
 	char buff[256];
 	char *message;
