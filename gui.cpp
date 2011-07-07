@@ -2,7 +2,10 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 #include "list.h"
+
+using namespace std;
 
 typedef struct win
 {
@@ -25,12 +28,12 @@ char *trim(char *c)
     return c;
 }
 
-void displayList(item *head, WINDOW* w)
+void displayList(vector<item> *head, WINDOW* w)
 {
-	item *i;
+	unsigned int i;
 	int line = 1;
 		
-	for(i = head; i != NULL; i=i->next, ++line)
+	for(i = 0; i < head->size(); ++i, ++line)
 	{
 		// clear line
 		wmove(w, line, 0);
@@ -40,12 +43,12 @@ void displayList(item *head, WINDOW* w)
 		mvwaddch(w, line, 0, '-');
 		
 		// put string
-		mvwprintw(w, line, 1, i->buff);
+		mvwprintw(w, line, 1, head->at(i).buff);
 	}
 	wrefresh(w);
 }
 
-void gui_update(item *q, item *b)
+void gui_update(vector<item> *q, vector<item> *b)
 {
 	// display the lists
 	displayList(b, board.window);

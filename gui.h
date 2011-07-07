@@ -1,7 +1,10 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <vector>
 #include "list.h"
+
+using namespace std;
 
 // intialize ncurses and get everything set up
 void init();
@@ -10,7 +13,7 @@ void init();
 void run();
 
 // when the "model" has changed, update the "view"
-void gui_update(item *q, item *b);
+void gui_update(vector<item> *q, vector<item> *b);
 
 #endif
 
