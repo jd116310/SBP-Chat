@@ -3,8 +3,8 @@
 
 typedef struct item
 {
-	int id;
-	//int userid;
+	int messageid;
+	int userid;
 	//int date;
 	char buff[256];
 }item;

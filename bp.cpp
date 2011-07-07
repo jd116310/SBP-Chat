@@ -3,15 +3,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <sys/time.h>
-#include <stdlib.h>
-#include <time.h>
 #include <sbp_api.h>
 #include "list.h"
 
 #define SBP_BUFSZ (8192)
 
 SBP_Connection *conn;
-int myID;
 
 void bpRecv()
 {
@@ -66,9 +63,7 @@ void bpInit(char *src, char *dst)
 		printf("Error starting timer");
 		exit(1);
 	}
-	srand(time(NULL));
 	
-	myID = rand();	
 }
 
 void bpQuit()

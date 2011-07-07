@@ -1,19 +1,29 @@
 #include <string.h>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 #include "list.h"
 #include "gui.h"
 #include "bp.h"
 
 using namespace std;
 
-static int counter = 0;
+static int userid = 0;
 vector<item> qlist;
 vector<item> blist;
 
 void sendMessage(char *p)
 {
 	item i;
-	i.id = counter++;
+	
+	if(userid == 0)
+	{
+		srand(time(NULL));
+		userid = rand();	
+	}
+	i.userid = userid;
+	i.messageid = rand();
+	
 	strcpy(i.buff, p);
 	
 	qlist.push_back(i);
@@ -32,7 +42,7 @@ void recvMessage(void *p)
 	
 	for(i = 0; i < qlist.size(); ++i)
 	{
-		if(!strcmp(message.buff, qlist[i].buff))
+		if(message.userid == userid && message.messageid == qlist[i].messageid)
 		{
 			vector<item>::iterator nth = qlist.begin() + i;
 			blist.push_back(*nth);
