@@ -24,7 +24,7 @@ void bpRecv()
 		bundle_size = SBP_GetDeliverySize(conn);
 		SBP_GetDeliveryData(conn, bundle_buffer, bundle_size);
 		
-		recvMessage(bundle_buffer);
+		recvMessage((void*)bundle_buffer);
 	}
 }
 
@@ -77,9 +77,9 @@ void bpQuit()
 	SBP_Shutdown();
 }
 
-void bpSendMessage(char *m)
+void bpSendMessage(void *m, int len)
 {
-	conn->send(conn, m, strlen(m));
+	conn->send(conn, m, len);
 }
 
 

@@ -11,7 +11,7 @@ typedef struct item
 
 // Simple enough...
 void sendMessage(char *p);
-void recvMessage(char *p);
+void recvMessage(void *p);
 
 #endif
 

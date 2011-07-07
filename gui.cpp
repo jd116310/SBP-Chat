@@ -28,7 +28,7 @@ char *trim(char *c)
     return c;
 }
 
-void displayList(vector<item> *head, WINDOW* w)
+void displayList(vector<item> *head, win* w)
 {
 	unsigned int i;
 	int line = 1;
@@ -36,23 +36,30 @@ void displayList(vector<item> *head, WINDOW* w)
 	for(i = 0; i < head->size(); ++i, ++line)
 	{
 		// clear line
-		wmove(w, line, 0);
-		wclrtoeol(w);
+		wmove(w->window, line, 0);
+		wclrtoeol(w->window);
 		
 		// add tick mark
-		mvwaddch(w, line, 0, '-');
+		mvwaddch(w->window, line, 0, '-');
 		
 		// put string
-		mvwprintw(w, line, 1, head->at(i).buff);
+		mvwprintw(w->window, line, 1, head->at(i).buff);
 	}
-	wrefresh(w);
+	
+	for( ; i < w->h; ++i)
+	{
+		// clear line
+		wmove(w->window, line, 0);
+		wclrtoeol(w->window);
+	}
+	wrefresh(w->window);
 }
 
 void gui_update(vector<item> *q, vector<item> *b)
 {
 	// display the lists
-	displayList(b, board.window);
-	displayList(q, queue.window);
+	displayList(b, &board);
+	displayList(q, &queue);
 }
 
 // Puts a nice header at the top of a window in the form:

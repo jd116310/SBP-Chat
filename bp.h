@@ -3,7 +3,7 @@
 
 void bpInit(char *src, char *dst);
 void bpQuit();
-void bpSendMessage(char *m);
+void bpSendMessage(void *m, int len);
 
 #endif
 

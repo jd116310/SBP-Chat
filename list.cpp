@@ -18,17 +18,35 @@ void sendMessage(char *p)
 	
 	qlist.push_back(i);
 	
-	bpSendMessage(p);
+	bpSendMessage(&i, sizeof(item));
 	gui_update(&qlist, &blist);
 }
 
-void recvMessage(char *p)
+void recvMessage(void *p)
 {
-	/*item i;
-	i.id = counter++;
-	strcpy(i.buff, p);
-	blist.push_back(i);*/
-	//removeitem(&qlist, 0);
+	unsigned int i;
+	int found = 0;
+	item message;
+
+	memcpy(&message, p, sizeof(item));
+	
+	for(i = 0; i < qlist.size(); ++i)
+	{
+		if(!strcmp(message.buff, qlist[i].buff))
+		{
+			vector<item>::iterator nth = qlist.begin() + i;
+			blist.push_back(*nth);
+			qlist.erase(nth);
+			found = 1;
+			break;
+		}
+	}
+	
+	if(!found)
+	{
+		blist.push_back(message);
+	}
+	
 	gui_update(&qlist, &blist);
 }
 
