@@ -5,15 +5,15 @@
 #include <sys/time.h>
 #include <sbp_api.h>
 #include "list.h"
+#include "bp.h"
 
 #define SBP_BUFSZ (8192)
 
-SBP_Connection *conn;
+// The number of times we check for a recieved bundle
+// until we send a keep alive (this does away with any threading needed)
+#define CHECKS_BEFORE_KEEPALIVE (1000 * KEEP_ALIVE_TIME / RECV_CHECK_TIME)
 
-// how often we check for a new bundle, in ms
-#define RECV_CHECK_TIME 100
-// how often we send a keep alive, in seconds
-#define KEEP_ALIVE_TIME 10
+SBP_Connection *conn;
 
 void bpRecv()
 {
@@ -41,7 +41,7 @@ void check(int sig)
 	static int count = 0;
 	bpRecv();
 	
-	if(++count == 1000 * KEEP_ALIVE_TIME / RECV_CHECK_TIME)
+	if(++count >= CHECKS_BEFORE_KEEPALIVE)
 	{
 		bpSendKeepAlive();
 		count = 0;
@@ -82,6 +82,8 @@ void bpInit(char *src, char *dst)
 		exit(1);
 	}
 	
+	// Send a keep alive to let the server know we are there
+	bpSendKeepAlive();
 }
 
 void bpQuit()

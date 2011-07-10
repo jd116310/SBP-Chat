@@ -5,11 +5,12 @@ int main(int argc, char *argv[])
 {
 	// parse params
 	//...
-	char src_eid[] = "ipn:1.1";
-	char dst_eid[] = "ipn:1.2";
+	//char src_eid[] = "ipn:1.1";
+	//char dst_eid[] = "ipn:1.2";
 	
 	// ======================= set up the SBP stuff ====================
-	bpInit(src_eid, dst_eid);
+	bpInit(argv[1], argv[2]);
+	//bpInit(src_eid, dst_eid);
 	
 	// ======================= lets make pretty stuff ====================
     init();
