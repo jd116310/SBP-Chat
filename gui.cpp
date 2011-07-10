@@ -40,13 +40,15 @@ void displayList(vector<item> *head, win* w)
 		wclrtoeol(w->window);
 		
 		// add tick mark
-		mvwaddch(w->window, line, 0, '-');
+		//mvwaddch(w->window, line, 0, '-');
+		
+		mvwprintw(w->window, line, 0, "[%s]", head->at(i).time);
 		
 		// put string
-		mvwprintw(w->window, line, 1, head->at(i).buff);
+		mvwprintw(w->window, line, 10, head->at(i).buff);
 	}
 	
-	for( ; i < w->h; ++i)
+	for( ; i < (unsigned int) w->h; ++i)
 	{
 		// clear line
 		wmove(w->window, line, 0);

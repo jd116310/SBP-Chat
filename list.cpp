@@ -12,6 +12,17 @@ static int userid = 0;
 vector<item> qlist;
 vector<item> blist;
 
+void getTime(char *buff)
+{
+	time_t rawtime;
+	struct tm * timeinfo;
+
+	time(&rawtime);
+	timeinfo = localtime (&rawtime);
+
+	strftime(buff, TIME_STR_LEN, "%X", timeinfo);
+}
+
 void sendMessage(char *p)
 {
 	item i;
@@ -23,6 +34,7 @@ void sendMessage(char *p)
 	}
 	i.userid = userid;
 	i.messageid = rand();
+	getTime(i.time);
 	
 	strcpy(i.buff, p);
 	

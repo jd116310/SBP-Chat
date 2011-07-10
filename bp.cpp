@@ -10,6 +10,11 @@
 
 SBP_Connection *conn;
 
+// how often we check for a new bundle, in ms
+#define RECV_CHECK_TIME 100
+// how often we send a keep alive, in seconds
+#define KEEP_ALIVE_TIME 10
+
 void bpRecv()
 {
 	int res = conn->listen(conn);
@@ -25,9 +30,22 @@ void bpRecv()
 	}
 }
 
+void bpSendKeepAlive()
+{
+	char keepalive[] = "KA";
+	conn->send(conn, keepalive, strlen(keepalive));
+}
+
 void check(int sig)
 {
+	static int count = 0;
 	bpRecv();
+	
+	if(++count == 1000 * KEEP_ALIVE_TIME / RECV_CHECK_TIME)
+	{
+		bpSendKeepAlive();
+		count = 0;
+	}
 }
 
 void bpInit(char *src, char *dst)
@@ -48,9 +66,9 @@ void bpInit(char *src, char *dst)
 	struct itimerval timer;
 	
 	timer.it_interval.tv_sec = 0;	//Deal only in usec
-	timer.it_interval.tv_usec = 100000;
+	timer.it_interval.tv_usec = RECV_CHECK_TIME * 1000;
 	timer.it_value.tv_sec = 0;		//Deal only in usec
-	timer.it_value.tv_usec = 100000;	
+	timer.it_value.tv_usec = RECV_CHECK_TIME * 1000;	
 
 	sigalrm_action.sa_handler = check;	
 	sigemptyset(&sigalrm_action.sa_mask);
