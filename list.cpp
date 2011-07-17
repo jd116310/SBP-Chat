@@ -1,7 +1,6 @@
 #include <string.h>
 #include <vector>
 #include <stdlib.h>
-#include <time.h>
 #include "list.h"
 #include "gui.h"
 #include "bp.h"
@@ -12,12 +11,9 @@ static int userid = 0;
 vector<item> qlist;
 vector<item> blist;
 
-void getTime(char *buff)
+void getTime(char *buff, time_t rawtime)
 {
-	time_t rawtime;
 	struct tm * timeinfo;
-
-	time(&rawtime);
 	timeinfo = localtime (&rawtime);
 
 	strftime(buff, TIME_STR_LEN, "%X", timeinfo);
@@ -34,7 +30,7 @@ void sendMessage(char *p)
 	}
 	i.userid = userid;
 	i.messageid = rand();
-	getTime(i.time);
+	time(&i.timestamp);
 	
 	strcpy(i.buff, p);
 	

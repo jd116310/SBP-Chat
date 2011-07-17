@@ -25,13 +25,11 @@ void hInterrupt(int sig)
 	interrupted = 1;
 }
 
-void getTime(char *buff)
+void getTime(char *buff, time_t rawtime)
 {
-	time_t rawtime;
-	struct tm *timeinfo;
+	struct tm * timeinfo;
+	timeinfo = localtime (&rawtime);
 
-	rawtime = time(NULL);
-	timeinfo = localtime(&rawtime);
 	strftime(buff, TIME_STR_LEN, "%X", timeinfo);
 }
 
@@ -55,7 +53,8 @@ int main(int argc, char *argv[])
 		int res = conn->listen(conn);
 		if(res >= 0)
 		{
-			char now[TIME_STR_LEN];
+			char nowBuffer[TIME_STR_LEN];
+			char thenBuffer[TIME_STR_LEN];
 			char bundle_buffer[SBP_BUFSZ];
 			int bundle_size;
 			string source(SBP_GetDeliverySource(conn));
@@ -77,9 +76,11 @@ int main(int argc, char *argv[])
 				time_t cur_time = time(NULL);
 				map<string, time_t>::iterator it;
 				
-				getTime(now);
 				i = (item *) bundle_buffer;
-				printf("Bundle from %s\n\tTimestamp: %s\n\tNow:       %s\n", source.c_str(), i->time, now);
+				
+				getTime(nowBuffer, cur_time);
+				getTime(thenBuffer, i->timestamp);
+				printf("Bundle from %s\n\tTimestamp: %s\n\tNow:       %s\n", source.c_str(), thenBuffer, nowBuffer);
 				
 				// send to all clients connected. If the last time of contact
 				// is to long, remove from list

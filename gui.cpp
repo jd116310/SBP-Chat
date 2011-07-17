@@ -32,6 +32,7 @@ void displayList(vector<item> *head, win* w)
 {
 	unsigned int i;
 	int line = 1;
+	char buff[TIME_STR_LEN];
 		
 	for(i = 0; i < head->size(); ++i, ++line)
 	{
@@ -42,7 +43,8 @@ void displayList(vector<item> *head, win* w)
 		// add tick mark
 		//mvwaddch(w->window, line, 0, '-');
 		
-		mvwprintw(w->window, line, 0, "[%s]", head->at(i).time);
+		getTime(buff, head->at(i).timestamp);
+		mvwprintw(w->window, line, 0, "[%s]", buff);
 		
 		// put string
 		mvwprintw(w->window, line, 10, head->at(i).buff);

@@ -1,15 +1,20 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <time.h>
+
 #define TIME_STR_LEN 9
 
 typedef struct item
 {
 	int messageid;
 	int userid;
-	char time[TIME_STR_LEN];
+	char nick[16];
+	time_t timestamp;
 	char buff[256];
 }item;
+
+void getTime(char *buff, time_t rawtime);
 
 // Simple enough...
 void sendMessage(char *p);
