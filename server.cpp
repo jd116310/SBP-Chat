@@ -8,7 +8,6 @@
 #include <map>
 #include "sbp_api.h"
 #include "list.h"
-#include "bp.h"
 
 #define SBP_BUFSZ 8192
 
@@ -35,19 +34,33 @@ void getTime(char *buff, time_t rawtime)
 
 int main(int argc, char *argv[])
 {
-	if(argc < 2)
+	int max_delay;
+
+	// Make sure we have enough arguments
+	// This could be made alot more robust
+	if(argc < 3)
 	{
-		fprintf(stderr, "Usage: %s <sink_eid>\n", argv[0]);
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "Usage: %s <sink_eid> <max_delay>\n", argv[0]);
+		fprintf(stderr, "\tsink_eid - the eid the server listens on\n");
+		fprintf(stderr, "\tmax_delay - the maximum delay in seconds between client and server\n");
+		return 1;
 	}
+	
+	// Get the maximum delay
+	max_delay = atoi(argv[2]);
+	
+	// Initialize the Bundle Protocol
 	SBP_Init();
 	SBP_Connection *conn = SBP_CreateConnection(argv[1]);
+
 	if(conn == NULL)
 	{
 		SBP_FATAL("Unable to open connection. . .");
 	}
-	signal(SIGINT, hInterrupt);
 	conn->blocking = SBP_BLOCKING;
+	
+	signal(SIGINT, hInterrupt);
+	
 	while(!interrupted)
 	{
 		int res = conn->listen(conn);
@@ -80,13 +93,13 @@ int main(int argc, char *argv[])
 				
 				getTime(nowBuffer, cur_time);
 				getTime(thenBuffer, i->timestamp);
-				printf("Bundle from %s\n\tTimestamp: %s\n\tNow:       %s\n", source.c_str(), thenBuffer, nowBuffer);
+				printf("Bundle from %s (%s)\n\tTimestamp: %s\n\tNow:       %s\n", source.c_str(), i->nick, thenBuffer, nowBuffer);
 				
 				// send to all clients connected. If the last time of contact
 				// is to long, remove from list
 				for(it = clients.begin(); it != clients.end(); /*blank*/)
 				{
-					if((cur_time - it->second) > (KEEP_ALIVE_TIME * 2))
+					if((cur_time - it->second) > (max_delay * 2))
 					{
 						map<string, time_t>::iterator erase_element = it++;
 						
@@ -115,6 +128,6 @@ int main(int argc, char *argv[])
 	
 	SBP_DestroyConnection(conn);
 	SBP_Shutdown();
-	exit(EXIT_SUCCESS);
+	return 0;
 }
 

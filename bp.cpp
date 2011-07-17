@@ -9,11 +9,8 @@
 
 #define SBP_BUFSZ (8192)
 
-// The number of times we check for a recieved bundle
-// until we send a keep alive (this does away with any threading needed)
-#define CHECKS_BEFORE_KEEPALIVE (1000 * KEEP_ALIVE_TIME / RECV_CHECK_TIME)
-
 SBP_Connection *conn;
+int max_delay;
 
 void bpRecv()
 {
@@ -41,14 +38,14 @@ void check(int sig)
 	static int count = 0;
 	bpRecv();
 	
-	if(++count >= CHECKS_BEFORE_KEEPALIVE)
+	if(++count >= ((1000 * max_delay / RECV_CHECK_TIME)) / 2)
 	{
 		bpSendKeepAlive();
 		count = 0;
 	}
 }
 
-void bpInit(char *src, char *dst)
+void bpInit(char *src, char *dst, int md)
 {
 	SBP_Init();
 	conn = SBP_CreateConnection(src);
@@ -59,6 +56,8 @@ void bpInit(char *src, char *dst)
 	
 	conn->blocking = SBP_POLL;
 	SBP_SetDestination(conn, dst);
+
+	max_delay = md;
 
 	// Set up timer for receiving 
 

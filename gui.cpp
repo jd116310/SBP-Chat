@@ -44,10 +44,10 @@ void displayList(vector<item> *head, win* w)
 		//mvwaddch(w->window, line, 0, '-');
 		
 		getTime(buff, head->at(i).timestamp);
-		mvwprintw(w->window, line, 0, "[%s]", buff);
+		mvwprintw(w->window, line, 0, "[%s] %s: ", buff, head->at(i).nick);
 		
 		// put string
-		mvwprintw(w->window, line, 10, head->at(i).buff);
+		wprintw(w->window, head->at(i).buff);
 	}
 	
 	for( ; i < (unsigned int) w->h; ++i)

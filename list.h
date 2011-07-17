@@ -7,14 +7,15 @@
 
 typedef struct item
 {
-	int messageid;
 	int userid;
+	int messageid;
 	char nick[16];
 	time_t timestamp;
 	char buff[256];
 }item;
 
 void getTime(char *buff, time_t rawtime);
+void setNick(char *n);
 
 // Simple enough...
 void sendMessage(char *p);

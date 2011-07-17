@@ -8,8 +8,9 @@
 using namespace std;
 
 static int userid = 0;
-vector<item> qlist;
-vector<item> blist;
+static char *nick;
+vector<item> qlist;	// queue list
+vector<item> blist;	// board list
 
 void getTime(char *buff, time_t rawtime)
 {
@@ -17,6 +18,11 @@ void getTime(char *buff, time_t rawtime)
 	timeinfo = localtime (&rawtime);
 
 	strftime(buff, TIME_STR_LEN, "%X", timeinfo);
+}
+
+void setNick(char *n)
+{
+	nick = n;
 }
 
 void sendMessage(char *p)
@@ -30,6 +36,7 @@ void sendMessage(char *p)
 	}
 	i.userid = userid;
 	i.messageid = rand();
+	strcpy(i.nick, nick);
 	time(&i.timestamp);
 	
 	strcpy(i.buff, p);
