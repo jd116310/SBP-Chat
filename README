@@ -1,0 +1,7 @@
+Chat client/server that runs over the Bundle Protocol. 
+
+It uses the Simple BP API developed by Ohio University 
+(ion.ocp.ohiou.edu/project/sbp_api) and in theory should run over DTN2 (not 
+tested) and ION. 
+
+For information or other questions contact Justin Dailey at jd116310@ohio.edu
